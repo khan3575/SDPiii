@@ -7,9 +7,12 @@ class Address(models.Model):
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     district= models.CharField(max_length=255)
-
+    class Meta:
+        unique_together = ('country', 'city', 'district')
     def __str__(self):
         return f"{self.country},{self.city},{self.district}"
+    
+    
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -38,6 +41,14 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'  # Email is used as the unique identifier
     REQUIRED_FIELDS = ['first_name', 'last_name']  # These fields are required when creating a superuser
+
+    def __str__(self):
+        return self.email
+    
+class Login(models.Model):
+    user= models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
+    email = models.EmailField(unique=True, null=False)
+    password = models.EmailField(unique=True, null=False)
 
     def __str__(self):
         return self.email
