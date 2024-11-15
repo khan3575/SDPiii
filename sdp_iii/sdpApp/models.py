@@ -52,3 +52,9 @@ class Login(models.Model):
 
     def __str__(self):
         return self.email
+    
+class Permission(models.Model):
+    permission_id  = models.IntegerField(primary_key=True)
+    role_id = models.ForeignKey(Role, null=False)
+    def __str__(self):
+        return self.permission_id
