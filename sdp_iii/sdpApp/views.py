@@ -10,6 +10,8 @@ from django.contrib.auth.hashers import make_password,check_password
 User = get_user_model()
 
 #Redirect to login if not authenticated
+def redirect_home(request):
+    return redirect('home')
 
 @login_required(login_url='/login/')
 def home(request):

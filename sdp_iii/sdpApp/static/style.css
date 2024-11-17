@@ -1,167 +1,180 @@
-*::before,
-*::after {
-    box-sizing: border-box;
+/* ===============================
+   CSS Reset
+=============================== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-body {
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background-color: #d0bfbf;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
+body, html {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #f9f9f9;
     color: #333;
+    overflow-x: hidden;
 }
-.container {
-    justify-items: center;
-    max-width: 600px;
-    width: 100%;
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ===============================
+   Global Styles
+=============================== */
+body {
     padding: 20px;
-    background-color: #a49292;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-form {
-    
-    display: flex;
-    flex-direction: column;
-    gap: 10px
-    ;
-}/*
-label {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    text-align: right;
-    width: 400px;
-    line-height: 26px;
-    margin-bottom: 10px;
-  }
-  */
-
-form label {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex;
-    text-align: right;
-    border-radius: 3px;
-    font-size: 14px;
+h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0;
     font-weight: bold;
-    margin-bottom: 5px;
-
 }
-form select {
-    width: 100%;
-    padding: 10px;
+
+p {
+    margin: 10px 0;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* ===============================
+   Header
+=============================== */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #FFD700;
+}
+
+.search-bar input {
+    padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
+    width: 200px;
 }
-form input[type="radio"] {
-    margin-right: 5px;
-}
-button {
 
-    width: 70px;
-    background-color: #ffffff70;
-    color: rgb(0, 0, 0);
-    padding: 10px;
-    font-size: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* ===============================
+   Footer
+=============================== */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+}
+
+/* ===============================
+   Utility Classes
+=============================== */
+.text-center {
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
     transition: background-color 0.3s ease;
 }
 
-.button:hover {
-    background-color: #5d6369;
-}
-input {
-    height: 16px;
-    flex: 0 0 100px;
-    margin-left: 3px;
-  }
-
-.text-center {
-    text-align: center;
-}
-.text-center {
-    text-align: center;
+.btn:hover {
+    background-color: #0056b3;
 }
 
-.mt-10 {
-    margin-top: 10px;
+/* ===============================
+   Responsive Grid
+=============================== */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -10px;
 }
 
-.mb-10 {
-    margin-bottom: 10px;
+.col {
+    flex: 1;
+    padding: 10px;
 }
 
-a {
-    color: #0e0b0a;
-    text-decoration: none;
+.col-6 {
+    flex: 0 0 50%;
 }
 
-a:hover {
-    text-decoration: underline;
+.col-4 {
+    flex: 0 0 33.3333%;
 }
 
-/**,
-
-
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-
-form input[type="checkbox"],
-form input[type="radio"] {
-    margin-right: 5px;
+.col-3 {
+    flex: 0 0 25%;
 }
 
-
-.text-center {
-    text-align: center;
-}
-
-.mt-10 {
-    margin-top: 10px;
-}
-
-.mb-10 {
-    margin-bottom: 10px;
-}
-
-a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
+/* Media Queries */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
+    .col-6, .col-4, .col-3 {
+        flex: 0 0 100%;
     }
 
-    form input[type="text"],
-    form input[type="email"],
-    form input[type="password"],
-    form select {
-        font-size: 14px;
-    }
-
-    form .submit-button {
-        font-size: 14px;
-        padding: 8px;
+    .search-bar input {
+        width: 100%;
     }
 }
-  */
