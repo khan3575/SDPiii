@@ -3,65 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - Assistant Blog Site</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    
     <div class="container">
-        <h2>Signup Here!</h2>
-        <form class="register_form" method="POST">
-            
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="user_email">Email:</label>
-                <input type="email" id="user_email" name="user_email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password1">Password:</label>
-                <input type="password" id="password1" name="password1" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password2">Confirm Password:</label>
-                <input type="password" id="password2" name="password2" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="first_name">First Name:</label>
-                <input type="text" id="first_name" name="first_name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="last_name">Last Name:</label>
-                <input type="text" id="last_name" name="last_name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="country">Country:</label>
-                <select id="country" name="country" required>
-                    <option value="" disabled selected>Select your country</option>
-                    <option value="Bangladesh">Bangladesh</option>
-                    <option value="Nepal">Nepal</option> 
-                    <option value="Bhutan">Bhutan</option> 
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="city">City:</label>
-                <input type="text" id="city" name="city" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="district">District:</label>
-                <input type="text" id="district" name="district" required>
-            </div>
-            
-            <button class="button" type="submit">Submit</button>
-        </form>
+        <div class="form-box">
+            <h2>Create an Account</h2>
+            <form class="form" method="POST" >
+                {% csrf_token %}
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="user_email">Email</label>
+                    <input type="email" id="user_email" name="user_email" required placeholder="Enter your email">
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" id="password1" name="password1" required placeholder="Enter your password">
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" id="password2" name="password2" required placeholder="Re-enter your password">
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required placeholder="Enter your first name">
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required placeholder="Enter your last name">
+                </div>
+
+                <!-- Country -->
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                        <option value="" disabled selected>Select your country</option>
+                        <option value="Bangladesh">Bangladesh</option>
+                        <option value="Nepal">Nepal</option>
+                        <option value="Bhutan">Bhutan</option>
+                    </select>
+                </div>
+
+                <!-- City -->
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" required placeholder="Enter your city">
+                </div>
+
+                <!-- District -->
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <input type="text" id="district" name="district" required placeholder="Enter your district">
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn" type="submit">Sign Up</button>
+            </form>
+            <p class="redirect-link">
+                Already have an account? <a href="/signup/">Log In</a>
+            </p>
+        </div>
     </div>
-    
+    <script src="{% static 'jscript.js' %}"></script>
 </body>
 </html>

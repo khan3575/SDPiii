@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Assistant Blog Site</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    {% include 'fragments/header.html' %}
+
+    <!-- About Us Content -->
+    <section class="about-us">
+        <div class="container">
+            <h1>About Us</h1>
+            <p>
+                We are <strong>Group 4, Intake 49, Section 7</strong>, students of 
+                <strong>
+                    <a href="https://www.bubt.edu.bd/" target="_blank" class="university-link">
+                        Bangladesh University of Business and Technology
+                    </a>
+                </strong>. 
+                This project is developed as part of our academic requirements. Below are the team members who worked together to create this platform:
+            </p>
+            <div class="team-list">
+                {% for member in team_members %}
+                <div class="team-member">
+                    <h3>{{ member.name }}</h3>
+                    <p>ID: {{ member.id }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% include 'fragments/footer.html' %}
+</body>
+</html>

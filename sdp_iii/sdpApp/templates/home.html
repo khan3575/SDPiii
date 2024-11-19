@@ -3,12 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home - Assistant Blog Site</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    {%include 'fragments/header.html' %}
-    <p>hello home</p>
+    {% include 'fragments/header.html' %}
+
+    <!-- Blog Feed -->
+    <section class="blog-feed">
+        {% for blog in blogs %}
+        <div class="blog-card">
+            <div class="blog-header">
+                <h3>{{ blog.title }}</h3>
+                <p>by {{ blog.user.first_name }} {{ blog.user.last_name }} on {{ blog.date }}</p>
+            </div>
+            <div class="blog-content">
+                <p>{{ blog.content }}</p>
+            </div>
+            <div class="blog-actions">
+                <button>Like</button>
+                <button>Comment</button>
+                <button>Share</button>
+            </div>
+        </div>
+        {% empty %}
+        <p>No blogs available. Start by <a href="/write_blog">writing a blog</a>!</p>
+        {% endfor %}
+    </section>
+    {% include 'fragments/footer.html' %}
+
+    <script src="{% static 'jscript.js' %}"></script>
+
 </body>
 </html>

@@ -123,4 +123,59 @@ def login_view(request):
         #     })
         
     return render(request,  "registration/login.html")
+@login_required(login_url='/login/')
+def following(request):
+    return render(request, 'following.html')
 
+@login_required(login_url='/login/')
+def write_blog(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        category_name = request.POST.get('category')
+
+        # Create category if it doesn't exist
+        category, _ = Category.objects.get_or_create(category_name=category_name)
+
+        # Create a blog description
+        blog_desc = BlogDesc.objects.create(
+            blog_desc_title=title,
+            date=request.POST.get('date', None),
+            time=request.POST.get('time', None),
+            category_id=category,
+            content_id=None
+        )
+
+        # Create the blog entry
+        Blog.objects.create(user_id=request.user, blog_desc=blog_desc, status='draft')
+        return redirect('home')  # Redirect to home after submission
+
+    return render(request, 'writeblog.html')
+
+
+@login_required(login_url='/login/')
+def profile(request):
+    if request.method == 'POST':
+        # Handle profile update
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+        messages.success(request, "Profile updated successfully!")
+        return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html', {'user': request.user})
+
+def about(request):
+    # Team members data
+    team_members = [
+        {"name": "Sakib Khan", "id": "21225103290"},
+        {"name": "Rifa Sanjida", "id": "21225103274"},
+        {"name": "Jannatul Masruk Mukta", "id": "21225103311"},
+        {"name": "Kishor Kumar Das", "id": "21225103295"},
+        {"name": "Mostaq Shahoriar", "id": "21225103305"},
+    ]
+    return render(request, 'about.html', {'team_members': team_members})
+
+def privacy_policy(request):
+    return render(request, 'privacypolicy.html')
