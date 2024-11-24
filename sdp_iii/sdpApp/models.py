@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import SET_NULL
+from datetime import date
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 
 # Create your models here
@@ -50,49 +51,28 @@ class Login(models.Model):
     user= models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
     email = models.EmailField(unique=True, null=False)
     password = models.EmailField(unique=True, null=False)
-
     def __str__(self):
         return self.email
-class BlogDesc(models.Model):
-    blog_desc_id = models.AutoField(primary_key=True)
-    blog_desc_title = models.CharField(max_length=255, null=False)
-    date = models.DateField(null=False)
-    time = models.TimeField(null=False)
-    category_id = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
-    content_id = models.IntegerField()
-
-    def __str__(self):
-        return self.blog_desc_title
     
 class Blog(models.Model):
-    STATUS_CHOICES =[
-        ('published','Published'),
+    STATUS_CHOICES = [
+        ('published', 'Published'),
         ('draft', 'Draft'),
         ('archived', 'Archived'),
     ]
-    blog_id= models.AutoField(primary_key=True)
+    blog_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    blog_desc = models.ForeignKey(BlogDesc, on_delete=SET_NULL, null=True)
+    blog_title = models.TextField(default="")
+    text = models.TextField(null=False)
+    image = models.ImageField(null=True)
+    category_name = models.CharField(max_length=100, default="")
+    date = models.DateField(null=False, default=date.today)  # Default to today's date
+    time = models.TimeField(null=False, auto_now_add=True)  # Automatically set the current time
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+
     def __str__(self):
         return f"Blog {self.blog_id} by {self.user_id}"
     
-
-
-class Category(models.Model):
-    category_id = models.AutoField(primary_key=True)
-    category_name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.category_name
-    
-class Content(models.Model):
-    content_id = models.AutoField(primary_key=True)
-    text = models.TextField(null=False)
-    image = models.ImageField(null=True)
-
-    def __str__(self):
-        return f"Content {self.content_id}"
     
 class Comment(models.Model):
     STATUS_CHOICES = [

@@ -179,3 +179,9 @@ def about(request):
 
 def privacy_policy(request):
     return render(request, 'privacypolicy.html')
+
+def  post_blog(request):
+    if request.METHOD== 'POST':
+        blog_title= request.POST.get('title')
+        blog_content= request.POST.get('content')
+        blog_catagories = request.POST.get('catagory')
