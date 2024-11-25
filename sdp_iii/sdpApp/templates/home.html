@@ -15,11 +15,12 @@
         {% for blog in blogs %}
         <div class="blog-card">
             <div class="blog-header">
-                <h3>{{ blog.title }}</h3>
-                <p>by {{ blog.user.first_name }} {{ blog.user.last_name }} on {{ blog.date }}</p>
+                <h3>{{ blog.blog_title }}</h3>
+                <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
             </div>
             <div class="blog-content">
-                <p>{{ blog.content }}</p>
+                <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
+                <a href="#">Read more</a>
             </div>
             <div class="blog-actions">
                 <button>Like</button>

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Example: Form Validation
+    // Form Validation
     const forms = document.querySelectorAll("form");
     forms.forEach((form) => {
         form.addEventListener("submit", function (event) {
@@ -31,32 +31,83 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-});
-document.addEventListener("DOMContentLoaded", function () {
+
+    // Handle Like Button Click
+    document.querySelectorAll(".like-button").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const blogId = button.getAttribute("data-blog-id");
+            const response = await fetch(`/like_blog/${blogId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                button.textContent = `Like (${data.like_count})`;
+            } else {
+                alert("Error liking the blog.");
+            }
+        });
+    });
+
+    // Handle Comment Button Click
+    document.querySelectorAll(".comment-button").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const blogId = button.getAttribute("data-blog-id");
+            const response = await fetch(`/get_comments/${blogId}/`);
+            const popup = document.getElementById("comment-popup");
+            const popupComments = document.getElementById("popup-comments");
+
+            if (response.ok) {
+                const comments = await response.json();
+                popupComments.innerHTML = comments
+                    .map((comment) => `<p><strong>${comment.user_id__first_name}:</strong> ${comment.comments}</p>`)
+                    .join("");
+                popup.classList.remove("hidden");
+            } else {
+                alert("Error loading comments.");
+            }
+        });
+    });
+
+    // Close Comment Popup
+    const closePopup = document.getElementById("close-popup");
+    closePopup.addEventListener("click", () => {
+        document.getElementById("comment-popup").classList.add("hidden");
+    });
+
+    // Infinite Scroll for Blog Feed
     const feed = document.querySelector(".blog-feed");
 
-    // Mock function to fetch more blogs (replace with real API later)
-    function fetchMoreBlogs() {
-        const newBlog = document.createElement("div");
-        newBlog.classList.add("blog-card");
-        newBlog.innerHTML = `
-            <div class="blog-header">
-                <h3>Sample Blog Title</h3>
-                <p>by Sample User on 2024-01-01</p>
-            </div>
-            <div class="blog-content">
-                <p>This is a dynamically loaded blog post.</p>
-            </div>
-            <div class="blog-actions">
-                <button>Like</button>
-                <button>Comment</button>
-                <button>Share</button>
-            </div>
-        `;
-        feed.appendChild(newBlog);
+    async function fetchMoreBlogs() {
+        const response = await fetch("/load_more_blogs/");
+        if (response.ok) {
+            const newBlogs = await response.json();
+            newBlogs.forEach((blog) => {
+                const newBlog = document.createElement("div");
+                newBlog.classList.add("blog-card");
+                newBlog.innerHTML = `
+                    <div class="blog-header">
+                        <h3>${blog.blog_title}</h3>
+                        <p>by ${blog.user.first_name} ${blog.user.last_name} on ${blog.date}</p>
+                    </div>
+                    <div class="blog-content">
+                        <p>${blog.text}</p>
+                    </div>
+                    <div class="blog-actions">
+                        <button class="like-button" data-blog-id="${blog.blog_id}">Like (${blog.like_count})</button>
+                        <button class="comment-button" data-blog-id="${blog.blog_id}">Comments (${blog.comment_count})</button>
+                    </div>
+                `;
+                feed.appendChild(newBlog);
+            });
+        } else {
+            console.error("Failed to load more blogs.");
+        }
     }
 
-    // Infinite scroll event listener
     window.addEventListener("scroll", function () {
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
             fetchMoreBlogs();

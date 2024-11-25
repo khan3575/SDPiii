@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import SET_NULL
 from datetime import date
+from django.utils.timezone import now
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 
 # Create your models here
@@ -63,11 +64,11 @@ class Blog(models.Model):
     blog_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     blog_title = models.TextField(default="")
-    text = models.TextField(null=False)
+    text = models.TextField(null=False,default="")
     image = models.ImageField(null=True)
     category_name = models.CharField(max_length=100, default="")
     date = models.DateField(null=False, default=date.today)  # Default to today's date
-    time = models.TimeField(null=False, auto_now_add=True)  # Automatically set the current time
+    time = models.TimeField(null=False, default=now)  # Automatically set the current time
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
     def __str__(self):
@@ -103,7 +104,7 @@ class Reaction(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
     comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
-    reaction_type = models.CharField(max_length=10, choices=REACTION_TYPES)
+    reaction_type = models.CharField(max_length=10, choices=REACTION_TYPES, default='like')
 
     class Meta:
         unique_together = ('user_id', 'blog_id', 'comment_id')  # Ensures unique reactions

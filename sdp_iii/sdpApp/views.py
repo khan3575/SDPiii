@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model,authenticate,login
-from .models import Address,Users,Login
+from .models import Address,Users,Login,Blog
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password,check_password
+from django.utils.timezone import now
 
 # Get the custom user model
 User = get_user_model()
@@ -13,9 +14,10 @@ User = get_user_model()
 def redirect_home(request):
     return redirect('home')
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 def home(request):
-    return render(request, "home.html",{})
+    blogs= Blog.objects.filter(status='published').order_by('-date','-time')
+    return render(request, "home.html",{'blogs':blogs})
 
 def signup(request):
     if request.method == 'POST':
@@ -127,30 +129,37 @@ def login_view(request):
 def following(request):
     return render(request, 'following.html')
 
+def like_blog(request,blog_id):
+    if request.method =='POST':
+        blog= get_object_or_404(Blog, pk=blog_id)
+        Reaction.obejects.create()
+
+def blog_detail(request,blog_id):
+    blog= get_object_or_404(Blog, pk=blog_id)
+    return render(request, 'blog_details.html',{'blog':blog})
+
 @login_required(login_url='/login/')
 def write_blog(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        category_name = request.POST.get('category')
-
-        # Create category if it doesn't exist
-        category, _ = Category.objects.get_or_create(category_name=category_name)
-
-        # Create a blog description
-        blog_desc = BlogDesc.objects.create(
-            blog_desc_title=title,
-            date=request.POST.get('date', None),
-            time=request.POST.get('time', None),
-            category_id=category,
-            content_id=None
-        )
-
-        # Create the blog entry
-        Blog.objects.create(user_id=request.user, blog_desc=blog_desc, status='draft')
-        return redirect('home')  # Redirect to home after submission
-
-    return render(request, 'writeblog.html')
+        category = request.POST.get('category')
+        
+        if title and content and category:
+            blog = Blog.objects.create(
+                user_id= request.user,
+                blog_title= title,
+                text=content,
+                category_name=category,
+                date= now().date(),
+                time= now().time(),
+                status='published'
+            )
+            blog.save()
+            return redirect('home')
+        else:
+            return render(request, 'writeblog.html',{'error':'All field are required.'})
+    return render(request, 'writeblog.html')    
 
 
 @login_required(login_url='/login/')
@@ -180,8 +189,3 @@ def about(request):
 def privacy_policy(request):
     return render(request, 'privacypolicy.html')
 
-def  post_blog(request):
-    if request.METHOD== 'POST':
-        blog_title= request.POST.get('title')
-        blog_content= request.POST.get('content')
-        blog_catagories = request.POST.get('catagory')

@@ -190,6 +190,14 @@ form {
     color: #333;
     font-size: 15px;
 }
+.blog-content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Show 3 lines of text */
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
 
 /* Login and Signup Forms */
 .login-form, .register_form {

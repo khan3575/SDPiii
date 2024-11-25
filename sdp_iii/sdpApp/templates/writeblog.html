@@ -13,6 +13,10 @@
         <h1>Write a Blog</h1>
         <form method="POST">
             {% csrf_token %}
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" placeholder="Enter blog title" required>
