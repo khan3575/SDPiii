@@ -15,7 +15,8 @@
         {% for blog in blogs %}
         <div class="blog-card">
             <div class="blog-header">
-                <h3>{{ blog.blog_title }}</h3>
+                
+                <h3><a href="{% url 'profile' %}" class="no-style-link">{{blog.blog_title}}</a></a></h3>
                 <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
             </div>
             <div class="blog-content">

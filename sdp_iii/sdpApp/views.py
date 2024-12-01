@@ -144,7 +144,7 @@ def write_blog(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         category = request.POST.get('category')
-        
+        status = request.POST.get('status')
         if title and content and category:
             blog = Blog.objects.create(
                 user_id= request.user,
@@ -153,7 +153,7 @@ def write_blog(request):
                 category_name=category,
                 date= now().date(),
                 time= now().time(),
-                status='published'
+                status=status
             )
             blog.save()
             return redirect('home')
@@ -189,3 +189,5 @@ def about(request):
 def privacy_policy(request):
     return render(request, 'privacypolicy.html')
 
+def show_blog(request):
+    return render(request,'showblog.html')

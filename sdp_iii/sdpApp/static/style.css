@@ -426,3 +426,7 @@ form {
 .btn-danger:hover {
     background-color: #c82333;
 }
+.no-style-link{
+    color: inherit;
+    text-decoration: none;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.blog_title }} - Assistant Blog Site</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'fragments/header.html' %}
+    <div class="container">
+        <!-- Blog Title and Author Information -->
+        <div class="blog-header">
+            <h1>{{ blog.blog_title }}</h1>
+            <p>by <strong>{{ blog.user_id.first_name }} {{ blog.user_id.last_name }}</strong> on {{ blog.date }}</p>
+        </div>
+
+        <!-- Blog Content -->
+        <div class="blog-content">
+            <p>{{ blog.text }}</p>
+        </div>
+
+        <!-- Blog Category and Status -->
+        <div class="blog-details">
+            <p><strong>Category:</strong> {{ blog.category_name }}</p>
+            <p><strong>Status:</strong> {{ blog.get_status_display }}</p> <!-- Using the choice value from the Blog model -->
+        </div>
+
+        <!-- Optional: Display Comments Section -->
+        <div class="comments-section">
+            <h3>Comments:</h3>
+            {% if comments %}
+                <ul>
+                    {% for comment in comments %}
+                        <li>
+                            <strong>{{ comment.user_id.first_name }} {{ comment.user_id.last_name }}:</strong> 
+                            <p>{{ comment.comments }}</p>
+                            <small>on {{ comment.date }} at {{ comment.time }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No comments yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Optional: Display Reaction Section -->
+        <div class="reaction-section">
+            <h3>Reactions:</h3>
+            <ul>
+                {% for reaction in reactions %}
+                    <li>{{ reaction.get_reaction_type_display }} by {{ reaction.user_id.first_name }} {{ reaction.user_id.last_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% include 'fragments/footer.html' %}
+</body>
+</html>

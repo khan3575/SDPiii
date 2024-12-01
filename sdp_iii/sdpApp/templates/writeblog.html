@@ -29,7 +29,15 @@
                 <label for="category">Category</label>
                 <input type="text" name="category" id="category" placeholder="Enter category" required>
             </div>
-            <button type="submit" class="btn">Submit Blog</button>
+            <div class="form-group">
+                <label for="status">Select</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected>Select status</option>
+                    <option value="publish">Publish</option>
+                    <option value="archive">Archive</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Submit Blog</button>   
         </form>
     </div>
     {% include 'fragments/footer.html' %}
