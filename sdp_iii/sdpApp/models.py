@@ -39,6 +39,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     objects = CustomUserManager()
 

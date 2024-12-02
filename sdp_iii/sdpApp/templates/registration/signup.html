@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
+    {% include 'fragments/header.html' %}
     <div class="container">
         <div class="form-box">
             <h2>Create an Account</h2>
@@ -51,6 +52,7 @@
                         <option value="Bangladesh">Bangladesh</option>
                         <option value="Nepal">Nepal</option>
                         <option value="Bhutan">Bhutan</option>
+                        <option value="Other">Others</option>
                     </select>
                 </div>
 
@@ -70,10 +72,11 @@
                 <button class="btn" type="submit">Sign Up</button>
             </form>
             <p class="redirect-link">
-                Already have an account? <a href="/signup/">Log In</a>
+                Already have an account? <a href="{% url 'login' %}">Log In</a>
             </p>
         </div>
     </div>
+    {% include 'fragments/footer.html' %}
     <script src="{% static 'jscript.js' %}"></script>
 </body>
 </html>

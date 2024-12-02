@@ -7,7 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #f0eded;
     color: #333;
     line-height: 1.6;
 }
@@ -165,7 +165,7 @@ form {
 }
 
 .blog-card, .card {
-    background: #ffffff;
+    background: #91c4a2;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px 20px;
@@ -187,7 +187,7 @@ form {
 
 .blog-content {
     margin-top: 10px;
-    color: #333;
+    color: #222020;
     font-size: 15px;
 }
 .blog-content p {
@@ -429,4 +429,11 @@ form {
 .no-style-link{
     color: inherit;
     text-decoration: none;
+}
+
+.profile-picture img {
+    width: 150px; /* Set the size */
+    height: 150px; /* Ensure height is the same as width */
+    border-radius: 50%; /* Round the image */
+    object-fit: cover; /* Ensure the image fits the container */
 }

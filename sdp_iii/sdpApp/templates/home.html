@@ -21,13 +21,23 @@
             </div>
             <div class="blog-content">
                 <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
-                <a href="#">Read more</a>
+                <a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
             </div>
             <div class="blog-actions">
                 <button>Like</button>
                 <button>Comment</button>
                 <button>Share</button>
+                {% if user.is_authenticated %}
+                    {% if blog.user_id in user.following.all %}
+                        <button class="unfollow-btn" data-blog-id="{{ blog.blog_id }}" data-user-id="{{ blog.user_id }}">Unfollow</button>
+                    {% else %}
+                        <button class="follow-btn" data-blog-id="{{ blog.blog_id }}" data-user-id="{{ blog.user_id }}">Follow</button>
+                    {% endif %}
+                {% else %}
+                    <p>Login to follow.</p>
+                {% endif %}
             </div>
+            
         </div>
         {% empty %}
         <p>No blogs available. Start by <a href="/write_blog">writing a blog</a>!</p>

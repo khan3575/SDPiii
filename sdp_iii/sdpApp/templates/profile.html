@@ -11,7 +11,18 @@
     {% include 'fragments/header.html' %}
     <div class="container">
         <h1>Profile</h1>
-        <form method="POST">
+
+        <!-- Display Profile Picture -->
+        <div class="profile-picture">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'default_profile_picture.png' %}" alt="Default Profile Picture">
+            {% endif %}
+        </div>
+
+        <!-- Profile Form -->
+        <form method="POST" enctype="multipart/form-data">  <!-- Note the enctype here -->
             {% csrf_token %}
             <div class="form-group">
                 <label for="first_name">First Name</label>
@@ -24,6 +35,10 @@
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" name="profile_picture" id="profile_picture">
             </div>
             <button type="submit" class="btn">Update Profile</button>
         </form>

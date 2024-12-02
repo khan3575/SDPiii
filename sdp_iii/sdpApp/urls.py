@@ -18,6 +18,6 @@ urlpatterns =  [
    path('about/', views.about, name='about'),
    path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
    path('logout/', logout_view, name='logout'),
-   path('blog/<int:blog_id>/', views.blog_detail, name='blog_detail'),
+   path('blog/<int:blog_id>/', views.show_blog, name='show_blog'),
    
 ]

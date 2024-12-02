@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.blog_title }} - Assistant Blog Site</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'fragments/header.html' %}
+    
+    <div class="container blog-container">
+        <!-- Blog Title and Author Information -->
+        <div class="blog-header">
+            <h1>{{ blog.blog_title }}</h1>
+            <div class="author-info">
+                <p><a href="#" class="no-style-link"><strong>{{ blog.user_id.first_name }} {{ blog.user_id.last_name }}</strong></a> | {{ blog.date }}</p>
+            </div>
+        </div>
+
+        <!-- Blog Content -->
+        <div class="blog-content">
+            <p>{{ blog.text }}</p>
+        </div>
+
+        <!-- Blog Category and Status -->
+        <div class="blog-details">
+            <div class="category-status">
+                <span class="category"><strong>Category:</strong> {{ blog.category_name }}</span>
+                <span class="status"><strong>Status:</strong> {{ blog.get_status_display }}</span>
+            </div>
+        </div>
+
+        <!-- Reactions and Comments Section -->
+        <div class="reaction-comments">
+            <div class="reaction-section">
+                <button class="btn like-button" data-blog-id="{{ blog.id }}">Like ({{ blog.like_count }})</button>
+                <button class="btn comment-button" data-blog-id="{{ blog.id }}">Comments ({{ blog.comment_count }})</button>
+                <button class="btn share-button" data-blog-id="{{ blog.id }}">Share</button>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <h3>Comments:</h3>
+                {% if comments %}
+                    <ul class="comments-list">
+                        {% for comment in comments %}
+                            <li class="comment-item">
+                                <strong>{{ comment.user_id.first_name }} {{ comment.user_id.last_name }}:</strong>
+                                <p>{{ comment.comments }}</p>
+                                <small>on {{ comment.date }} at {{ comment.time }}</small>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No comments yet. Be the first to comment!</p>
+                {% endif %}
+            </div>
+
+            <!-- Comment Form -->
+            <div class="comment-form">
+                <h4>Add a Comment</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="comment" id="comment" rows="4" placeholder="Write your comment here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Post Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'fragments/footer.html' %}
+    
+    <script src="{% static 'jscript.js' %}"></script>
+</body>
+</html>

@@ -134,7 +134,7 @@ def like_blog(request,blog_id):
         blog= get_object_or_404(Blog, pk=blog_id)
         Reaction.obejects.create()
 
-def blog_detail(request,blog_id):
+def show_blog(request,blog_id):
     blog= get_object_or_404(Blog, pk=blog_id)
     return render(request, 'blog_details.html',{'blog':blog})
 
@@ -170,6 +170,10 @@ def profile(request):
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
         user.email = request.POST.get('email', user.email)
+        profile_picture= request.FILES.get('profile_picture')
+        
+        if profile_picture:
+            user.profile_picture =profile_picture
         user.save()
         messages.success(request, "Profile updated successfully!")
         return render(request, 'profile.html', {'user': user})
@@ -189,5 +193,3 @@ def about(request):
 def privacy_policy(request):
     return render(request, 'privacypolicy.html')
 
-def show_blog(request):
-    return render(request,'showblog.html')
