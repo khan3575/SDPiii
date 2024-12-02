@@ -162,8 +162,9 @@ def write_blog(request):
     return render(request, 'writeblog.html')    
 
 
+#edit profile view
 @login_required(login_url='/login/')
-def profile(request):
+def edit_profile(request):
     if request.method == 'POST':
         # Handle profile update
         user = request.user
@@ -176,8 +177,15 @@ def profile(request):
             user.profile_picture =profile_picture
         user.save()
         messages.success(request, "Profile updated successfully!")
-        return render(request, 'profile.html', {'user': user})
-    return render(request, 'profile.html', {'user': request.user})
+        return render(request, 'editprofile.html', {'user': user})
+    return render(request, 'editprofile.html', {'user': request.user})
+
+#show  profile view
+@login_required(login_url='/login/')
+def profile_show(request):
+    return render(request, 'showprofile.html', {'user': request.user})
+
+
 
 def about(request):
     # Team members data

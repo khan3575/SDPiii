@@ -40,7 +40,10 @@
                 <label for="profile_picture">Profile Picture</label>
                 <input type="file" name="profile_picture" id="profile_picture">
             </div>
-            <button type="submit" class="btn">Update Profile</button>
+            <div action="{% url 'profile' %}">
+                <button type="submit" class="btn">Update Profile</button>
+            </div>
+           
         </form>
 
         <!-- Logout Button -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details - Assistant Blog Site</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'fragments/header.html' %}
+
+    <div class="container">
+        <h1>Profile Details</h1>
+
+        <!-- Display Profile Picture -->
+        <div class="profile-picture">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'default_profile_picture.png' %}" alt="Default Profile Picture">
+            {% endif %}
+        </div>
+
+        <!-- Profile Details -->
+        <div class="profile-info">
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <p id="first_name">{{ user.first_name }}</p>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <p id="last_name">{{ user.last_name }}</p>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <p id="email">{{ user.email }}</p>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                {% if user.address %}
+                    <p id="address">{{ user.address.city }}, {{ user.address.district }}, {{ user.address.country }}</p>
+                {% else %}
+                    <p id="address">Address not provided</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Back to Profile Edit or Logout -->
+        <div class="profile-actions">
+            
+            <a href="{% url 'edit_profile' %}" class="btn no-style-white-font">Edit Profile</a> <!-- Link to the profile edit page -->
+            <form action="{% url 'logout' %}" method="POST" style="margin-top: 20px;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    {% include 'fragments/footer.html' %}
+</body>
+</html>

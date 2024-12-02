@@ -430,6 +430,10 @@ form {
     color: inherit;
     text-decoration: none;
 }
+.no-style-white-font{
+    color: white;
+    text-decoration: none;
+}
 
 .profile-picture img {
     width: 150px; /* Set the size */
