@@ -18,7 +18,12 @@
                 <p><a href="#" class="no-style-link"><strong>{{ blog.user_id.first_name }} {{ blog.user_id.last_name }}</strong></a> | {{ blog.date }}</p>
             </div>
         </div>
-
+        <div class="blog-img">
+            {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="Blog Image">
+            {% endif %}
+        </div>
+        
         <!-- Blog Content -->
         <div class="blog-content">
             <p>{{ blog.text }}</p>

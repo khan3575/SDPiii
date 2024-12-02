@@ -153,6 +153,7 @@ def write_blog(request):
         content = request.POST.get('content')
         category = request.POST.get('category')
         status = request.POST.get('status')
+        image= request.FILES.get('image')
         if title and content and category:
             blog = Blog.objects.create(
                 user_id= request.user,
@@ -161,7 +162,8 @@ def write_blog(request):
                 category_name=category,
                 date= now().date(),
                 time= now().time(),
-                status=status
+                status=status,
+                image=image
             )
             blog.save()
             return redirect('home')

@@ -68,7 +68,7 @@ class Blog(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     blog_title = models.TextField(default="")
     text = models.TextField(null=False,default="")
-    image = models.ImageField(null=True)
+    image = models.ImageField(upload_to='blog_images/',null=True,blank=True)
     category_name = models.CharField(max_length=100, default="")
     date = models.DateField(null=False, default=date.today)  # Default to today's date
     time = models.TimeField(null=False, default=now)  # Automatically set the current time
