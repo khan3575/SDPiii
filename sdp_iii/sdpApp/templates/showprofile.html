@@ -50,6 +50,7 @@
         <div class="profile-actions">
             
             <a href="{% url 'edit_profile' %}" class="btn no-style-white-font">Edit Profile</a> <!-- Link to the profile edit page -->
+            <a href="{% url 'myblogs' %}" class="btn no-style-white-font">My Blogs</a> <!-- Link to My Blogs page -->
             <form action="{% url 'logout' %}" method="POST" style="margin-top: 20px;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Logout</button>

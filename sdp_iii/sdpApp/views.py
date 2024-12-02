@@ -12,14 +12,22 @@ User = get_user_model()
 
 #Redirect to login if not authenticated
 def redirect_home(request):
+   
     return redirect('home')
 
 #@login_required(login_url='/login/')
 def home(request):
-    blogs= Blog.objects.filter(status='published').order_by('-date','-time')
+    search_query = request.GET.get('search','')
+    if search_query:
+        blogs= Blog.objects.filter(blog_title__icontains=search_query)
+    else:
+        blogs= Blog.objects.all()
+
+    blogs= blogs.filter(status='published').order_by('-date','-time')
     return render(request, "home.html",{'blogs':blogs})
 
 def signup(request):
+    
     if request.method == 'POST':
         # Extract user details from form data
         user_email = request.POST.get('user_email')
@@ -200,4 +208,11 @@ def about(request):
 
 def privacy_policy(request):
     return render(request, 'privacypolicy.html')
+
+
+#showing myblog lists
+
+def myblogs(request):
+    user_blogs = Blog.objects.filter(user_id=request.user.user_id).order_by('-date')
+    return render(request, 'myblogs.html', {'user_blogs': user_blogs})
 

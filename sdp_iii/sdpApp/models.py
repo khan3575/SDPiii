@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,Permissi
 
 # Create your models here
 # Create adress table
+
 class Address(models.Model):
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -21,6 +22,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
+        
         user = self.model(email=email, **extra_fields)
         user.set_password(password)  # Hash the password
         user.save(using=self._db)

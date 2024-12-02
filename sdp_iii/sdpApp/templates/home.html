@@ -1,51 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Assistant Blog Site</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     {% include 'fragments/header.html' %}
-
-    <!-- Blog Feed -->
+    
+    <!-- Blog Feed Section -->
     <section class="blog-feed">
-        {% for blog in blogs %}
-        <div class="blog-card">
-            <div class="blog-header">
-                
-                <h3><a href="{% url 'profile' %}" class="no-style-link">{{blog.blog_title}}</a></a></h3>
-                <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
-            </div>
-            <div class="blog-content">
-                <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
-                <a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
-            </div>
-            <div class="blog-actions">
-                <button>Like</button>
-                <button>Comment</button>
-                <button>Share</button>
-                {% if user.is_authenticated %}
-                    {% if blog.user_id in user.following.all %}
-                        <button class="unfollow-btn" data-blog-id="{{ blog.blog_id }}" data-user-id="{{ blog.user_id }}">Unfollow</button>
-                    {% else %}
-                        <button class="follow-btn" data-blog-id="{{ blog.blog_id }}" data-user-id="{{ blog.user_id }}">Follow</button>
-                    {% endif %}
-                {% else %}
-                    <p>Login to follow.</p>
-                {% endif %}
-            </div>
-            
-        </div>
-        {% empty %}
-        <p>No blogs available. Start by <a href="/write_blog">writing a blog</a>!</p>
-        {% endfor %}
+        {% if blogs %}
+            {% for blog in blogs %}
+                <div class="blog-card">
+                    <div class="blog-header">
+                        <h3><a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">{{ blog.blog_title }}</a></h3>
+                        <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
+                    </div>
+                    <div class="blog-content">
+                        <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
+                        <a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
+                    </div>
+                    <div class="blog-actions">
+                        <button>Like</button>
+                        <button>Comment</button>
+                        <button>Share</button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No blogs found matching your search.</p>
+        {% endif %}
     </section>
+
     {% include 'fragments/footer.html' %}
-
-    <script src="{% static 'jscript.js' %}"></script>
-
 </body>
 </html>

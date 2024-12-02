@@ -38,21 +38,34 @@ header h1, .main-header h1 {
 }
 
 .logo img {
-    height: 40px;
+    border-radius: 20%;
+    height: 50px;
 }
 
 .search-bar {
-    flex: 1;
-    margin: 0 20px;
+    flex:1;
+    margin: 0px 20px;
     position: relative;
+    align-self: center;
 }
 
 .search-bar input {
-    width: 100%;
+    
+    flex-grow: 1;
+    width: 65%;
     padding: 8px 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #4a4949;
     border-radius: 20px;
     font-size: 14px;
+}
+.search-bar button {
+    
+    padding: 7px 9px;       /* Padding inside the button */
+    background-color: #007bff; /* Button background */
+    color: white;             /* Button text color */
+    border: 1px solid #4a4949;             /* Remove border */
+    border-radius: 20px;       /* Rounded corners for the button */
+    cursor: pointer;         /* Cursor changes to pointer on hover */
 }
 
 .nav-links {
@@ -198,7 +211,10 @@ form {
     -webkit-box-orient: vertical;
     white-space: normal;
 }
-
+.blog-item-title{
+    color: inherit;
+    text-decoration: none;
+}
 /* Login and Signup Forms */
 .login-form, .register_form {
     max-width: 400px;
