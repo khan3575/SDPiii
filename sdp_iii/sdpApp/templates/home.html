@@ -16,12 +16,12 @@
             {% for blog in blogs %}
                 <div class="blog-card">
                     <div class="blog-header">
-                        <h3><a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">{{ blog.blog_title }}</a></h3>
+                        <h3><a href="{% url 'blog_details' blog_id=blog.blog_id %}" class="no-style-link">{{ blog.blog_title }}</a></h3>
                         <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
                     </div>
                     <div class="blog-content">
                         <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
-                        <a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
+                        <a href="{% url 'blog_details' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
                     </div>
                     <div class="blog-actions">
                         <button>Like</button>

@@ -15,12 +15,14 @@
         <div class="blog-header">
             <h1>{{ blog.blog_title }}</h1>
             <div class="author-info">
-                <p><a href="#" class="no-style-link"><strong>{{ blog.user_id.first_name }} {{ blog.user_id.last_name }}</strong></a> | {{ blog.date }}</p>
+                <p><a href="{% url 'user_profile' user_id=blog.user_id.user_id %}" class="no-style-link">
+                    <strong>{{ blog.user_id.first_name }} {{ blog.user_id.last_name }}</strong>
+                </a> | {{ blog.date }}</p>
             </div>
         </div>
         <div class="blog-img">
             {% if blog.image %}
-            <img src="{{ blog.image.url }}" alt="Blog Image">
+                <img src="{{ blog.image.url }}" alt="Blog Image">
             {% endif %}
         </div>
         
@@ -40,7 +42,10 @@
         <!-- Reactions and Comments Section -->
         <div class="reaction-comments">
             <div class="reaction-section">
-                <button class="btn like-button" data-blog-id="{{ blog.id }}">Like ({{ blog.like_count }})</button>
+                <!-- Like Button and Count -->
+                <button class="btn like-button" data-blog-id="{{ blog.id }}">
+                    Like ({{ blog.like_count }})
+                </button>
                 <button class="btn comment-button" data-blog-id="{{ blog.id }}">Comments ({{ blog.comment_count }})</button>
                 <button class="btn share-button" data-blog-id="{{ blog.id }}">Share</button>
             </div>

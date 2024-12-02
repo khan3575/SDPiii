@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model,authenticate,login
-from .models import Address,Users,Login,Blog
+from .models import Address,Users,Login,Blog,Reaction,Comment,ActivityLog,Follow
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password,check_password
@@ -133,18 +133,47 @@ def login_view(request):
         #     })
         
     return render(request,  "registration/login.html")
+
+def user_profile(request, user_id):
+    # Fetch the user based on the ID
+    user = get_object_or_404(Users, pk=user_id)
+    
+    if not user:
+        raise HttpResponse("User not found")
+    blogs = Blog.objects.filter(user_id=user)
+    blogs= blogs.filter(status='published')
+
+    is_following = Follow.objects.filter(follower=request.user, following=user).exists()
+
+    return render(request, 'user_profile.html', {'user': user, 'blogs': blogs,'is_following': is_following,})
+
+
 @login_required(login_url='/login/')
 def following(request):
-    return render(request, 'following.html')
+    user = request.user
 
-def like_blog(request,blog_id):
-    if request.method =='POST':
-        blog= get_object_or_404(Blog, pk=blog_id)
-        Reaction.obejects.create()
+    follow_users = user.following.all()
+    blogs = Blog.objects.filter(user_id__in=follow_users).filter(status='published').order_by('-date','-time')
+    return render(request, 'following.html',{'blogs',blogs})
 
-def show_blog(request,blog_id):
+
+
+def blog_details(request,blog_id):
     blog= get_object_or_404(Blog, pk=blog_id)
-    return render(request, 'blog_details.html',{'blog':blog})
+    like_count = Reaction.objects.filter(blog_id=blog, reaction_type='like').count()
+    
+    # Get the comment count for this blog
+    comment_count = Comment.objects.filter(blog_id=blog).count()
+
+    # Get the list of comments
+    comments = Comment.objects.filter(blog_id=blog)
+
+    return render(request, 'blog_details.html', {
+        'blog': blog,
+        'comments': comments,
+        'like_count': like_count,
+        'comment_count': comment_count,
+    })
 
 @login_required(login_url='/login/')
 def write_blog(request):
@@ -217,4 +246,48 @@ def privacy_policy(request):
 def myblogs(request):
     user_blogs = Blog.objects.filter(user_id=request.user.user_id).order_by('-date')
     return render(request, 'myblogs.html', {'user_blogs': user_blogs})
+
+
+#adding a like 
+
+@login_required
+def like_blog(request, blog_id):
+    blog = Blog.objects.get(id=blog_id)
+    user= request.user
+
+    existing_reaction = Reaction.obejects.filter(user_id=user,blog_id=blog, reaction_type='like').first()
+
+    if existing_reaction:
+        existing_reaction.delete()
+    else:
+        Reaction.objects.create(user_id=user,blog_id=blog, reaction_type='like')
+    return redirect('blog_detail',blog_id=blog_id)
+
+@login_required
+def get_comments(request, blog_id):
+    comments = Comment.objects.filter(blog_id=blog_id).values('user_id__first_name', 'user_id__last_name', 'comments', 'date', 'time')
+    
+    comment_list = list(comments)  # Convert QuerySet to list
+    return JsonResponse({'comments': comment_list})
+
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(Users, pk=user_id)
+    
+    # Check if the current user is not trying to follow themselves
+    if request.user == user_to_follow:
+        return redirect('profile', user_id=user_id)
+    
+    # Check if the user is already following
+    existing_follow = Follow.objects.filter(follower=request.user, following=user_to_follow).first()
+    
+    if not existing_follow:
+        # If not following, create a new follow record
+        Follow.objects.create(follower=request.user, following=user_to_follow)
+    else:
+        # If already following, remove the follow record (unfollow)
+        existing_follow.delete()
+
+    return redirect('profile', user_id=user_id)  # Or any other page you want to redirect to
 

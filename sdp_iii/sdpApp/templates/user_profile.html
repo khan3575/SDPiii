@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.first_name }} {{ user.last_name }}'s Profile - Assistant Blog Site</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'fragments/header.html' %}
+
+    <div class="container profile-container">
+        <h1>{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
+
+        <!-- Author Information -->
+        <div class="profile-info">
+            <div class="profile-picture">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img src="{% static 'default-profile.png' %}" alt="Profile Picture">
+                {% endif %}
+            </div>
+            <div class="profile-details">
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Address:</strong> {{ user.address }}</p>
+                <p><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+            </div>
+        </div>
+        <!-- Follow Button -->
+        <!-- Follow/Unfollow Button -->
+        <div class="follow-button">
+            {% if user != request.user %}
+                {% if user in request.user.following.all %}
+            <!-- If the logged-in user is already following this user, show "Unfollow" button -->
+                    <form method="POST" action="{% url 'follow_user' user_id=user.user_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="unfollow-btn">Unfollow</button>
+                    </form>
+                {% else %}
+            <!-- If the logged-in user is not following this user, show "Follow" button -->
+                    <form method="POST" action="{% url 'follow_user' user_id=user.user_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="follow-btn">Follow</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+       
+
+        <!-- User's Blogs -->
+        <h3>{{ user.first_name }}'s Blogs</h3>
+        <div class="user-blogs">
+            {% if blogs %}
+                <ul class="blogs-list">
+                    {% for blog in blogs %}
+                        <li class="blog-item">
+                            <h4><a href="{% url 'blog_details' blog_id=blog.blog_id %}">{{ blog.blog_title }}</a></h4>
+                            <p>{{ blog.text|truncatewords:20 }}</p>
+                            <small>Published on {{ blog.date }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No blogs yet. Stay tuned for more content!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'fragments/footer.html' %}
+    
+    <script src="{% static 'jscript.js' %}"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@
             <ul class="blogs-list">
                 {% for blog in user_blogs %}
                     <li class="blog-item">
-                        <h2><a href="{% url 'show_blog' blog_id=blog.blog_id %}" class="blog-item-title">{{ blog.blog_title }}</a></h2>
+                        <h2><a href="{% url 'blog_details' blog_id=blog.blog_id %}" class="blog-item-title">{{ blog.blog_title }}</a></h2>
                         <p><strong>Published on:</strong> {{ blog.date|date:"Y-m-d" }}</p>
                         <p><strong>Status:</strong> {{ blog.status }}</p>
                     </li>
