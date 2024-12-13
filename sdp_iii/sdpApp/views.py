@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import get_user_model,authenticate,login
 from .models import Address,Users,Login,Blog,Reaction,Comment,ActivityLog,Follow
 from django.contrib.auth.decorators import login_required
@@ -122,17 +122,52 @@ def login_view(request):
                 messages.error(request, "Invalid email or password.")
         except Login.DoesNotExist:
             messages.error(request,"Invalid email or password.")
-        # if user is not None:
-        #     login(request, user)
-        #     messages.success(request,"You have successfully logged in.")
-        #     return redirect('home/')
-        # else:
-        #     messages.error(request,"Invalid email or password")
-        #     return render(request, "registration/login.html",{
-        #         'user_email':user_email
-        #     })
+        
         
     return render(request,  "registration/login.html")
+
+def forgot_password(request):
+    if request.method == "POST":
+        user_email = request.POST.get('email')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        try:
+            # Check if the user exists in the Users table
+            user = Users.objects.get(email=user_email)
+
+            # Check if the user exists in the Login table
+            login_entry = Login.objects.get(email=user_email)
+
+            if new_password and confirm_password:
+                if new_password != confirm_password:
+                    messages.error(request, "Passwords do not match.")
+                    return render(request, 'forgetpassword.html', {"email": user_email})
+
+                # Update the password in the Users table
+                user.password = make_password(new_password)
+                user.save()
+
+                # Update the password in the Login table
+                login_entry.password = make_password(new_password)
+                login_entry.save()
+
+                messages.success(request, "Password has been reset successfully.")
+                return redirect('login')
+
+            # If no password fields are provided, just validate the email
+            return render(request, 'forgetpassword.html', {"email": user_email, "reset_mode": True})
+
+        except Users.DoesNotExist:
+            messages.error(request, "No user found with this email.")
+            return render(request, 'forgetpassword.html')
+
+        except Login.DoesNotExist:
+            messages.error(request, "No login record found for this email.")
+            return render(request, 'forgetpassword.html')
+
+    return render(request, 'forgetpassword.html')
+
 
 def user_profile(request, user_id):
     # Fetch the user based on the ID

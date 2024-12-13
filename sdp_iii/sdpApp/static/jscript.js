@@ -113,4 +113,43 @@ document.addEventListener("DOMContentLoaded", function () {
             fetchMoreBlogs();
         }
     });
+    //forgot password
+    const forgotPasswordForm = document.getElementById("forgot-password-form");
+    const forgotPasswordMessage = document.getElementById("response-message");
+
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(forgotPasswordForm);
+            const email = formData.get("email");
+
+            try {
+                const response = await fetch(forgotPasswordForm.action, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                // Display response message
+                forgotPasswordMessage.classList.remove("hidden");
+                if (data.status === "success") {
+                    forgotPasswordMessage.textContent = data.message;
+                    forgotPasswordMessage.style.color = "green";
+                } else {
+                    forgotPasswordMessage.textContent = data.message;
+                    forgotPasswordMessage.style.color = "red";
+                }
+            } catch (error) {
+                console.error("Error submitting forgot password form:", error);
+                forgotPasswordMessage.classList.remove("hidden");
+                forgotPasswordMessage.textContent = "An error occurred. Please try again.";
+                forgotPasswordMessage.style.color = "red";
+            }
+        });
+    }
 });

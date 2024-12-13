@@ -9,6 +9,7 @@ def logout_view(request):
 
 urlpatterns =  [
    path('', views.redirect_home, name='redirect'),
+   path('forgot_password/', views.forgot_password,name="forgot_password"),
    path('myblogs/', views.myblogs, name='myblogs'),
    path('blog/<int:blog_id>/', views.blog_details, name='blog_details'),
    path('signup/',views.signup, name='signup'),
