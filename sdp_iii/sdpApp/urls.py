@@ -12,6 +12,7 @@ urlpatterns =  [
    path('forgot_password/', views.forgot_password,name="forgot_password"),
    path('myblogs/', views.myblogs, name='myblogs'),
    path('blog/<int:blog_id>/', views.blog_details, name='blog_details'),
+   path('like_blog/<int:blog_id>/', views.like_blog, name='like_blog'),
    path('signup/',views.signup, name='signup'),
    path('home/',views.home, name='home'),
    path('login/',views.login_view, name= 'login'),

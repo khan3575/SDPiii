@@ -12,19 +12,27 @@
     
     <!-- Blog Feed Section -->
     <section class="blog-feed">
-        {% if blogs %}
-            {% for blog in blogs %}
+        {% if blog_data %}
+            {% for blog_entry in blog_data %}
                 <div class="blog-card">
                     <div class="blog-header">
-                        <h3><a href="{% url 'blog_details' blog_id=blog.blog_id %}" class="no-style-link">{{ blog.blog_title }}</a></h3>
-                        <p>by {{ blog.user_id.first_name }} {{ blog.user_id.last_name }} on {{ blog.date }}</p>
+                        <h3>
+                            <a href="{% url 'blog_details' blog_id=blog_entry.blog.blog_id %}" class="no-style-link">
+                                {{ blog_entry.blog.blog_title }}
+                            </a>
+                        </h3>
+                        <p>by {{ blog_entry.blog.user_id.first_name }} {{ blog_entry.blog.user_id.last_name }} on {{ blog_entry.blog.date }}</p>
                     </div>
                     <div class="blog-content">
-                        <p>{{ blog.text|truncatechars:200|linebreaksbr }}</p>
-                        <a href="{% url 'blog_details' blog_id=blog.blog_id %}" class="no-style-link">Read more</a>
+                        <p>{{ blog_entry.blog.text|truncatechars:200|linebreaksbr }}</p>
+                        <a href="{% url 'blog_details' blog_id=blog_entry.blog.blog_id %}" class="no-style-link">Read more</a>
                     </div>
                     <div class="blog-actions">
-                        <button>Like</button>
+                        <button 
+                            class="btn like-button {% if blog_entry.user_liked %}liked{% endif %}" 
+                            data-blog-id="{{ blog_entry.blog.blog_id }}">
+                            Like ({{ blog_entry.like_count }})
+                        </button>
                         <button>Comment</button>
                         <button>Share</button>
                     </div>
@@ -34,6 +42,7 @@
             <p>No blogs found matching your search.</p>
         {% endif %}
     </section>
+    
 
     {% include 'fragments/footer.html' %}
 </body>

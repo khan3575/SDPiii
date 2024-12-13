@@ -42,12 +42,13 @@
         <!-- Reactions and Comments Section -->
         <div class="reaction-comments">
             <div class="reaction-section">
-                <!-- Like Button and Count -->
-                <button class="btn like-button" data-blog-id="{{ blog.id }}">
-                    Like ({{ blog.like_count }})
+                <!-- Like Button -->
+                <button class="btn like-button {% if user_liked %}liked{% endif %}" data-blog-id="{{ blog.blog_id }}">
+                    Like ({{ like_count }})
                 </button>
-                <button class="btn comment-button" data-blog-id="{{ blog.id }}">Comments ({{ blog.comment_count }})</button>
-                <button class="btn share-button" data-blog-id="{{ blog.id }}">Share</button>
+
+                <button class="btn comment-button" data-blog-id="{{ blog.blog_id }}">Comments ({{ blog.comment_count }})</button>
+                <button class="btn share-button" data-blog-id="{{ blog.blog_id }}">Share</button>
             </div>
 
             <!-- Comments Section -->

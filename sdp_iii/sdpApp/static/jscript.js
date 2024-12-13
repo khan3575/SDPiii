@@ -152,4 +152,39 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    document.querySelectorAll(".like-button").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const blogId = button.getAttribute("data-blog-id");
+            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+            if (!blogId) {
+                console.error("Blog ID is missing on like button.");
+                return;
+            }
+            try {
+                const response = await fetch(`/like_blog/${blogId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    button.textContent = `Like (${data.like_count})`;
+                    if (data.liked) {
+                        button.classList.add("liked");
+                    } else {
+                        button.classList.remove("liked");
+                    }
+                    button.style.display = "none"; 
+                    setTimeout(() => button.style.display = "block", 0);
+                } else {
+                    alert("An error occurred while liking the blog.");
+                }
+            } catch (error) {
+                console.error("Error liking the blog:", error);
+            }
+        });
+    });
 });

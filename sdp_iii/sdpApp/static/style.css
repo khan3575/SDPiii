@@ -457,3 +457,8 @@ form {
     border-radius: 50%; /* Round the image */
     object-fit: cover; /* Ensure the image fits the container */
 }
+
+.like-button.liked {
+    background-color: #007BFF;
+    color: white;
+}

@@ -24,7 +24,19 @@ def home(request):
         blogs= Blog.objects.all()
 
     blogs= blogs.filter(status='published').order_by('-date','-time')
-    return render(request, "home.html",{'blogs':blogs})
+    blog_data =  []
+    for blog in blogs:
+        like_count= Reaction.objects.filter(blog_id=blog, reaction_type='like').count()
+        user_liked=False
+        if request.user.is_authenticated:
+            user_liked=Reaction.objects.filter(blog_id=blog, user_id=request.user, reaction_type='like').exists()
+        blog_data.append({
+            'blog':blog,
+            'like_count':like_count,
+            user_liked:user_liked,
+        })
+    
+    return render(request, "home.html",{'blog_data':blog_data})
 
 def signup(request):
     
@@ -195,7 +207,10 @@ def following(request):
 
 def blog_details(request,blog_id):
     blog= get_object_or_404(Blog, pk=blog_id)
-    like_count = Reaction.objects.filter(blog_id=blog, reaction_type='like').count()
+    user_liked=False
+    like_count= Reaction.objects.filter(blog_id=blog, reaction_type='like').count()
+    if request.user.is_authenticated:
+        user_liked= Reaction.objects.filter(blog_id=blog, user_id= request.user, reaction_type='like').exists()
     
     # Get the comment count for this blog
     comment_count = Comment.objects.filter(blog_id=blog).count()
@@ -208,6 +223,7 @@ def blog_details(request,blog_id):
         'comments': comments,
         'like_count': like_count,
         'comment_count': comment_count,
+        'user_liked' : user_liked,
     })
 
 @login_required(login_url='/login/')
@@ -284,19 +300,32 @@ def myblogs(request):
 
 
 #adding a like 
-
 @login_required
 def like_blog(request, blog_id):
-    blog = Blog.objects.get(id=blog_id)
-    user= request.user
+    if request.method == "POST":
+        blog = Blog.objects.get(pk=blog_id)
+        user = request.user
 
-    existing_reaction = Reaction.obejects.filter(user_id=user,blog_id=blog, reaction_type='like').first()
+        # Check if the user has already liked the blog
+        existing_reaction = Reaction.objects.filter(user_id=user, blog_id=blog, reaction_type='like').first()
 
-    if existing_reaction:
-        existing_reaction.delete()
-    else:
-        Reaction.objects.create(user_id=user,blog_id=blog, reaction_type='like')
-    return redirect('blog_detail',blog_id=blog_id)
+        if existing_reaction:
+            # If already liked, remove the like
+            existing_reaction.delete()
+            liked = False
+        else:
+            # Otherwise, add a like
+            Reaction.objects.create(user_id=user, blog_id=blog, reaction_type='like')
+            liked = True
+
+        # Update like count
+        like_count = Reaction.objects.filter(blog_id=blog, reaction_type='like').count()
+
+        return JsonResponse({"liked": liked, "like_count": like_count})
+
+    return HttpResponse(status=405)  # Method not allowed
+
+
 
 @login_required
 def get_comments(request, blog_id):
