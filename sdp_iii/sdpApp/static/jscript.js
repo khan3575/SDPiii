@@ -2,7 +2,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("JavaScript Loaded");
 
-    // Example: Toggle Navigation Menu (if added in future)
+    // Attach all functionality
+    attachMenuToggle();
+    attachFormValidation();
+    attachLikeButtonHandler();
+    attachCommentButtonHandler();
+    attachInfiniteScroll();
+    attachForgotPasswordHandler();
+});
+
+// Function to handle menu toggle
+function attachMenuToggle() {
     const menuToggle = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
 
@@ -11,8 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
             navLinks.classList.toggle("active");
         });
     }
+}
 
-    // Form Validation
+// Function to validate forms
+function attachFormValidation() {
     const forms = document.querySelectorAll("form");
     forms.forEach((form) => {
         form.addEventListener("submit", function (event) {
@@ -31,28 +43,50 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+}
 
-    // Handle Like Button Click
+// Function to handle Like Button Click
+function attachLikeButtonHandler() {
     document.querySelectorAll(".like-button").forEach((button) => {
         button.addEventListener("click", async () => {
             const blogId = button.getAttribute("data-blog-id");
-            const response = await fetch(`/like_blog/${blogId}/`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
-                },
-            });
+            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-            if (response.ok) {
-                const data = await response.json();
-                button.textContent = `Like (${data.like_count})`;
-            } else {
-                alert("Error liking the blog.");
+            if (!blogId) {
+                console.error("Blog ID is missing on like button.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/like_blog/${blogId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    button.textContent = `Like (${data.like_count})`;
+
+                    // Toggle the liked class
+                    if (data.liked) {
+                        button.classList.add("liked");
+                    } else {
+                        button.classList.remove("liked");
+                    }
+                } else {
+                    alert("An error occurred while liking the blog.");
+                }
+            } catch (error) {
+                console.error("Error liking the blog:", error);
             }
         });
     });
+}
 
-    // Handle Comment Button Click
+// Function to handle Comment Button Click
+function attachCommentButtonHandler() {
     document.querySelectorAll(".comment-button").forEach((button) => {
         button.addEventListener("click", async () => {
             const blogId = button.getAttribute("data-blog-id");
@@ -71,14 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+}
 
-    // Close Comment Popup
-    const closePopup = document.getElementById("close-popup");
-    closePopup.addEventListener("click", () => {
-        document.getElementById("comment-popup").classList.add("hidden");
-    });
-
-    // Infinite Scroll for Blog Feed
+// Function to handle infinite scroll
+function attachInfiniteScroll() {
     const feed = document.querySelector(".blog-feed");
 
     async function fetchMoreBlogs() {
@@ -103,6 +133,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 feed.appendChild(newBlog);
             });
+
+            // Rebind event listeners for dynamically added buttons
+            attachLikeButtonHandler();
         } else {
             console.error("Failed to load more blogs.");
         }
@@ -113,7 +146,10 @@ document.addEventListener("DOMContentLoaded", function () {
             fetchMoreBlogs();
         }
     });
-    //forgot password
+}
+
+// Function to handle forgot password
+function attachForgotPasswordHandler() {
     const forgotPasswordForm = document.getElementById("forgot-password-form");
     const forgotPasswordMessage = document.getElementById("response-message");
 
@@ -122,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
 
             const formData = new FormData(forgotPasswordForm);
-            const email = formData.get("email");
 
             try {
                 const response = await fetch(forgotPasswordForm.action, {
@@ -152,39 +187,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-    document.querySelectorAll(".like-button").forEach((button) => {
-        button.addEventListener("click", async () => {
-            const blogId = button.getAttribute("data-blog-id");
-            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-            if (!blogId) {
-                console.error("Blog ID is missing on like button.");
-                return;
-            }
-            try {
-                const response = await fetch(`/like_blog/${blogId}/`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": csrfToken,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    button.textContent = `Like (${data.like_count})`;
-                    if (data.liked) {
-                        button.classList.add("liked");
-                    } else {
-                        button.classList.remove("liked");
-                    }
-                    button.style.display = "none"; 
-                    setTimeout(() => button.style.display = "block", 0);
-                } else {
-                    alert("An error occurred while liking the blog.");
-                }
-            } catch (error) {
-                console.error("Error liking the blog:", error);
-            }
-        });
-    });
-});
+}
