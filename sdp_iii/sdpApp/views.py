@@ -197,11 +197,7 @@ def user_profile(request, user_id):
 
 @login_required(login_url='/login/')
 def following(request):
-    user = request.user
-
-    follow_users = user.following.all()
-    blogs = Blog.objects.filter(user_id__in=follow_users).filter(status='published').order_by('-date','-time')
-    return render(request, 'following.html',{'blogs',blogs})
+    return render(request, 'following.html')
 
 
 

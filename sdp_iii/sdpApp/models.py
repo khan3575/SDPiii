@@ -4,8 +4,8 @@ from datetime import date
 from django.utils.timezone import now
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 
-# Create your models here
-# Create adress table
+# models here
+# adress table
 
 class Address(models.Model):
     country = models.CharField(max_length=255)

@@ -7,8 +7,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0eded;
-    color: #626060;
+    background-color: #A9A9A9;
+    color: #000000;
     line-height: 1.6;
 }
 
@@ -21,9 +21,11 @@ body {
 
 /* Header */
 header, .main-header {
-    background: #ffffff;
+    height: 100px;
+    width: auto;
+    background: #e4e4e4;
     padding: 10px 20px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #746e6e;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -40,24 +42,30 @@ header h1, .main-header h1 {
 .logo img {
     border-radius: 20%;
     height: 50px;
+    margin: 1;
 }
+
 
 .search-bar {
     flex:1;
-    margin: 0px 20px;
-    position: relative;
+    width: auto;
+    margin: 0px 10px;
+    position: center;
+
     align-self: center;
 }
 
 .search-bar input {
     
     flex-grow: 1;
+    align-items: center;
     width: 65%;
     padding: 8px 10px;
     border: 1px solid #4a4949;
     border-radius: 20px;
     font-size: 14px;
 }
+
 .search-bar button {
     
     padding: 7px 9px;       /* Padding inside the button */
@@ -95,7 +103,7 @@ header h1, .main-header h1 {
 
 /* Footer */
 footer {
-    background: #333;
+    background: #545353;
     color: #fff;
     text-align: center;
     padding: 10px 20px;
@@ -178,8 +186,8 @@ form {
 }
 
 .blog-card, .card {
-    background: #91c4a2;
-    border: 1px solid #ddd;
+    background: #ddd;
+    border: 1px solid #0c0c0c;
     border-radius: 5px;
     padding: 15px 20px;
     margin-bottom: 20px;
@@ -299,7 +307,7 @@ form {
 
 /* Footer Styles */
 .main-footer {
-    background-color: #333;
+    background-color: #535353;
     color: #fff;
     padding: 20px 0;
     font-size: 14px;
@@ -307,6 +315,7 @@ form {
 
 .main-footer .container {
     display: flex;
+    height: 50px;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
@@ -357,12 +366,13 @@ form {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    image-rendering: auto;
 }
 
 .footer-right img {
     width: 20px;
     height: 20px;
-    filter: brightness(0) invert(1);
+    filter: brightness(1) invert(0);
     transition: transform 0.3s ease;
 }
 
